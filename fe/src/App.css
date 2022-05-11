@@ -1,0 +1,16 @@
+.App{
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+}
+.nav{
+    list-style-type: none;
+    width: 200px;
+    display: flex;
+    justify-content: space-evenly;
+}
+
+a{
+    text-decoration: none;
+    color: inherit;
+}
