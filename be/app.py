@@ -14,9 +14,9 @@ class BigApp:
 
     def process_request(self, request):
         username = request
-        r = requests.get(f"https://api.github.com/users/{username}/repos")
+        #r = requests.get(f"https://api.github.com/users/{username}/repos")
         try:
-            repo_list = parse_curl(r.json())
+            repo_list = parse_curl(test_curl_array)#r.json())
             new_username = True
             if(self._db_handler.check_for_user(username)):
                 new_username = False
@@ -31,6 +31,3 @@ class BigApp:
 
     def register_response_callback(self, callback):
         self._response_cb = callback
-
-    def unregister_client(self, client_id: str):
-        del self.clients[client_id]
