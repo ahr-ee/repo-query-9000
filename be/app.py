@@ -14,9 +14,9 @@ class BigApp:
 
     def process_request(self, request):
         username = request
-        #r = requests.get(f"https://api.github.com/users/{username}/repos")
+        r = requests.get(f"https://api.github.com/users/{username}/repos")
         try:
-            repo_list = parse_curl(test_curl_array)#r.json())
+            repo_list = parse_curl(r.json())
             new_username = True
             if(self._db_handler.check_for_user(username)):
                 new_username = False
