@@ -27,12 +27,8 @@ async def server_ready(request):
 
 class Server(WebSocketEndpoint):
     def process_request(self, websocket, request):
-        if not request:
-            trace = sys._getframe(1).f_code.co_name
-            raise RuntimeError(f"Empty json request msg. Trace: {trace}")
-        else:
-            global app
-            app.process_request(request)
+        global app
+        app.process_request(request)
 
     async def on_connect(self, websocket):
         global app
