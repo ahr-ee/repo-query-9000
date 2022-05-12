@@ -28,7 +28,6 @@ export default class SocketHandler {
     handleResponse(response) {
         if(response){
             const responseData = JSON.parse(response.data)
-            console.log(responseData)
             if(responseData === 'BAD REQUEST'){
                 console.error("BAD REQUEST: Please try again.")
             }

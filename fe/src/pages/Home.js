@@ -20,12 +20,27 @@ const Home = () => {
     }
 
     const RepoView = () => {
-        console.log(state)
         if (state.length > 0) {
             var username = Object.keys(state[0])[0]
-            var name = Object.values(state[0])
-            console.log(username)
-            console.log(name)
+            var repos = Object.values(state[0])[0]['repos']
+
+            return <div>
+                <h2>
+                    {username}
+                </h2>
+                <div>
+                    {
+                        repos.map((el) => (
+                            <div>
+                                <h3>{el['name']}</h3>
+                                <div>html_url: {el['html_url']}</div>
+                                <div>description: {el['description']}</div>
+                                <div>language: {el['language']}</div>
+                            </div>
+                        ))
+                    }
+                </div>
+            </div>
         }
     }
 

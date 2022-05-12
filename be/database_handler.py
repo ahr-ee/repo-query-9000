@@ -46,10 +46,12 @@ class DbHandler:
         return file_data.keys()
 
     async def refresh_db(self):
-        print("loop")
         users = self.query_users()
         for user in users:
-            #r = requests.get(f"https://api.github.com/users/{user}/repos")
-            repo_list = parse_curl(test_curl_array)#r.json())
-            self.update_db(user, repo_list)
+            r = requests.get(f"https://api.github.com/users/{user}/repos")
+            try:
+                repo_list = parse_curl(r.json())
+                self.update_db(user, repo_list)
+            except Exception as e:
+                raise RuntimeError("Cannot refresh db") from e
 
