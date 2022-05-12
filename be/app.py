@@ -26,15 +26,11 @@ class BigApp:
         except Exception as e:
             self.respond("BAD REQUEST")
 
-    def respond(self, response, client_id = None):
-        clients = [self.clients[client_id]] if client_id else self.clients.values()
-        for client in clients:
-            asyncio.create_task(client(response))
+    def respond(self, response):
+        asyncio.create_task(self._response_cb(response))
 
-    def register_client(self, client_callback):
-        client_id = str(uuid4())
-        self.clients[client_id] = client_callback
-        return client_id
+    def register_response_callback(self, callback):
+        self._response_cb = callback
 
     def unregister_client(self, client_id: str):
         del self.clients[client_id]

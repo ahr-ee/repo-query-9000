@@ -32,30 +32,24 @@ class Server(WebSocketEndpoint):
 
     async def on_connect(self, websocket):
         global app
-        callback = self.create_client_callback(websocket)
-        self.callback = callback
-        self.client_id = app.register_client(callback)
+        callback = self.create_response_callback(websocket)
+        app.register_response_callback(callback)
         await websocket.accept()
 
     async def on_disconnect(self, websocket, close_code):
-        global app
-        app.unregister_client(self.client_id)
         return await super().on_disconnect(websocket, close_code)
 
     async def on_receive(self, websocket, request):
         self.process_request(websocket, request)
 
-    def create_client_callback(self, websocket):
-        async def client_callback(response):
-            if not isinstance(response, list):
-                response = [response]
-            for r in response:
-                try:
-                    await websocket.send_json(r)
-                except Exception as e:
-                    raise RuntimeError("Error sending JSON response") from e
+    def create_response_callback(self, websocket):
+        async def response_callback(response):
+            try:
+                await websocket.send_json(response)
+            except Exception as e:
+                raise RuntimeError("Error sending JSON response") from e
 
-        return client_callback
+        return response_callback
 
 routes = [
     WebSocketRoute("/appserver", endpoint=Server),

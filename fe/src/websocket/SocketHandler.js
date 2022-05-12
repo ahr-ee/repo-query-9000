@@ -5,7 +5,6 @@ export default class SocketHandler {
         if (SocketHandler.instance) {
             return SocketHandler.instance
         }
-        console.log("foo foo")
         this.socket = new WebSocket(
             'ws://127.0.0.1:8000/appserver'     
         )

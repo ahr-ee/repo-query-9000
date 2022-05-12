@@ -7,19 +7,13 @@ def parse_curl(curl_blob):
         if el_count >= MAX_EL:
             break
 
-        name = None
-        html_url = None
-        description = None
-        language = None
+        if (("name" not in el) | ("html_url" not in el) | ("description" not in el) | ("language" not in el)):
+            continue
 
-        if "name" in el:
-            name = el["name"]
-        if "html_url" in el:
-            html_url = el["html_url"]
-        if "description" in el:
-            description = el["description"]
-        if "language" in el:
-            language = el["language"]
+        name = el["name"]
+        html_url = el["html_url"]
+        description = el["description"]
+        language = el["language"]
 
 
         repo_list.append({
