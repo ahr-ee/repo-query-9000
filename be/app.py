@@ -1,25 +1,31 @@
 import asyncio
 from uuid import uuid4
-
-
+from database_handler import DbHandler
 import asyncio
 import requests
 from uuid import uuid4
-
-MAX_EL = 5
+from common import parse_curl
+from test_curl import test_curl_array
 
 class BigApp:
     def __init__(self):
-        print("hello world")
+        self._db_handler = DbHandler()
         self.clients = {}
 
     def process_request(self, request):
         username = request
-        r = requests.get(f"https://api.github.com/users/{username}/repos")
+        #r = requests.get(f"https://api.github.com/users/{username}/repos")
         try:
-            info_list = parse_curl(r.json())
-            self.respond({username: info_list})
-        except:
+            repo_list = parse_curl(test_curl_array)#r.json())
+            new_username = True
+            if(self._db_handler.check_for_user(username)):
+                new_username = False
+            self._db_handler.update_db(username, repo_list)
+            user_dict = {username: {"repos": repo_list, "new_username": new_username}}
+            self.respond(user_dict)
+        except Exception as e:
+            #print(r.json())
+            print(e)
             self.respond("BAD REQUEST")
 
     def respond(self, response, client_id = None):
@@ -34,19 +40,3 @@ class BigApp:
 
     def unregister_client(self, client_id: str):
         del self.clients[client_id]
-
-def parse_curl(curl_blob):
-    el_count = 0
-    info_list = []
-    for el in curl_blob:
-        if el_count >= MAX_EL:
-            break
-        info_list.append({
-                "name": el["name"],
-                "html_url": el["html_url"],
-                "description": el["description"],
-                "language": el["language"],
-            }
-        )
-        el_count += 1
-    return info_list
